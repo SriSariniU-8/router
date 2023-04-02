@@ -3,72 +3,43 @@ import { useNavigate } from "react-router-dom";
 import {BrowserRouter as Router, Route, Switch, Link} from 'react-router-dom';
 import {Outlet} from 'react-router';
 import Form from "./Form";
+import { useEffect } from "react";
+import {useSelector} from 'react-redux';
+import { useDispatch } from "react-redux";
+import { actionCreators } from "./state";
+
+const Home = () => {
 
 
-const Home = (props) => {
+  const interns = useSelector(state => state.interns);
+  const person = useSelector(state => state.person);
 
-  const[Username, setUsername] = useState("");
-  const[Password, setPassword]= useState("");
+  const dispatch = useDispatch();
+//   console.log(interns);
 
-  
-
-
-    const[ interns, setinterns] = useState([
-        {
-          name: 'sarini',
-          password: '123'
-        },
-    
-        {
-          name: 'varshini',
-          password:'abc'
-        },
-
-        {
-            name: 'aravind',
-            password:'xyz'
-          },
-
-          {
-            name: 'nantha',
-            password:'456'
-          },
-        ]
-    )
-
+    // console.log(person);
         const navigate = useNavigate();
 
 
-    function deleted(key){
+    // function deleted(key){
         
-        // console.log(key);
-        // let interns1 = interns; 
-        let interns1= interns.filter((intern) => (intern.name!== key))
-        setinterns(interns1);
-        console.log(interns);
-        // console.log('deleted');
-        }
+    //     }
 
     function addRecord(){
         navigate('/home/form');
-        // var newintern = {};
-        // newintern.name = Username;
-        // newintern.password= Password;
-        // interns.push(newintern);
         
     }
 
+    function Editted(name,pass){
+      navigate(`/edit/${name}/${pass}`);
+    }
+
+    
     
     return ( 
         <>
         <h1>This is Home</h1>
         <button onClick={addRecord}>Add Record</button>
-        {/* <Switch>
-        <Route exact path='/home/form'>
-          <Form username= "" password= ""></Form>
-          <Form username = {Username} password= {Password}></Form>
-        </Route>
-        </Switch> */}
         <table>
             <tr>
             <th>name</th>
@@ -80,12 +51,8 @@ const Home = (props) => {
                     <tr key={ intern.name }>
                     <td>{ intern.name }</td>
                     <td>{ intern.password}</td>
-                    <td><button onClick={() => {
-                        // console.log('deleted');
-                        // { interns= interns.filter((internss) => (internss.name!= intern.name))}
-                        deleted(intern.name);
-
-                    }}>Delete</button></td>
+                    <td><button onClick={()=> {dispatch(actionCreators.Deleteintern(intern.name))}}>Delete</button></td>
+                    <button onClick={() => {Editted(intern.name, intern.password)}}>Edit </button>
                     </tr>
                     );
                 }) 
@@ -93,7 +60,6 @@ const Home = (props) => {
 </tbody>
         </table>
 
-        {/* {props.children} */}
         <Outlet></Outlet>
         
         </>

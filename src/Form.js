@@ -1,35 +1,70 @@
 import { useNavigate } from "react-router-dom";
+import {useSelector} from 'react-redux';
+import { useDispatch } from "react-redux";
+import { actionCreators } from "./state";
+import { useEffect, useState } from "react";
 
-const Form = (props) => {
+const ADD = () => {
 
-    const history = useNavigate();
+    const dispatch = useDispatch();
+
+        const interns = useSelector(state => state.interns);
+        const person = useSelector(state => state.person);
+
+        const [Name, setName] = useState('');
+        const[Pass, setPass] = useState(''); 
 
 
-    // const[username, password] = props;
+        const navigate= useNavigate();
+
+
+        // In your code, you are setting the values of newperson.name and newperson.pass
+        //  inside the change handlers changeValueUser and changeValuePass.
+        //   However, setState is asynchronous in React, which means that the new state might not be immediately available. 
+        //   So, when you access the newperson object inside the Submit function, the name and pass properties might still have their old values.
+
+        // var newperson = {
+        //     name: '',
+        //     pass:''         
+        //  };
+
+
+    
 
 
     const changeValueUser = (e1) =>{
-        // person.name= e1.target.value;
-        props.setUsername(e1.target.value);
+        setName(e1.target.value);
+        // newperson.name = Name;
+        // console.log(Name);
     }
 
     const changeValuePass = (e2) =>{
-        // person.password= e2.target.value;
-        props.setPassword(e2.target.value);
+        setPass(e2.target.value);
+        // newperson.pass = Pass;
     }
 
-    function Submit()
+    function Submit(e)
     {
-        history.push('/home');
+        e.preventDefault();
+
+        const newperson = {
+            name: Name,
+            pass: Pass,
+          };
+      
+
+        dispatch(actionCreators.AddIntern(newperson));
+        console.log(newperson);
+        navigate('/home');
     }
 
     return ( 
         <form >
             <input type="text" onChange={changeValueUser} />
             <input type="password" onChange= {changeValuePass}/>
-            <button onClick={Submit}></button>
+            <button onClick={Submit}>Add</button>
         </form>
      );
 }
  
-export default Form;
+export default ADD;
